@@ -139,7 +139,7 @@ def deposit():
     deposit_amount = request.form['amount']
     if(username and bank.account_db.get_account_info(username)):
         # Implement deposit logic here
-
+        bank.deposit(username, int(deposit_amount))
         return jsonify({'success': True})
     else:
         return jsonify({'error': 'Invalid token'}), 401
@@ -150,10 +150,14 @@ def deposit():
 def withdraw():
     token = request.headers.get('token')
     username = bank.auth.decode_jwt_token(token)
-    deposit_amount = request.form['amount']
+    deposit_amount = int(request.form['amount'])
+
+    if(deposit_amount > bank.account_db.balances.get(username, 0)):
+        return jsonify({'error': 'Insufficient funds'}), 400
+
     if(username and bank.account_db.get_account_info(username)):
         # Implement deposit logic here
-
+        bank.withdraw(username, int(deposit_amount))
         return jsonify({'success': True})
     else:
         return jsonify({'error': 'Invalid token'}), 401
@@ -165,11 +169,13 @@ def transfer():
     token = request.headers.get('token')
     username = bank.auth.decode_jwt_token(token)
     target_account = request.form['recipient']
-    transfer_amount = request.form['amount']
+    transfer_amount = int(request.form['amount'])
     if(target_account and not bank.account_db.get_account_info(target_account)):
         return jsonify({'error': 'Recipient account does not exist'}), 400
     if(username == target_account):
         return jsonify({'error': 'Cannot transfer to the same account'}), 400
+    if(transfer_amount > bank.account_db.balances.get(username, 0)):
+        return jsonify({'error': 'Insufficient funds'}), 400
     
     if(username and bank.account_db.get_account_info(username)):
         # Implement transfer logic here
