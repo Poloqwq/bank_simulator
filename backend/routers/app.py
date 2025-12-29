@@ -139,7 +139,7 @@ def deposit():
     deposit_amount = request.form['amount']
     if(username and bank.account_db.get_account_info(username)):
         # Implement deposit logic here
-        bank.deposit(username, int(deposit_amount))
+        
         return jsonify({'success': True})
     else:
         return jsonify({'error': 'Invalid token'}), 401
@@ -157,7 +157,7 @@ def withdraw():
 
     if(username and bank.account_db.get_account_info(username)):
         # Implement deposit logic here
-        bank.withdraw(username, int(deposit_amount))
+        
         return jsonify({'success': True})
     else:
         return jsonify({'error': 'Invalid token'}), 401
@@ -179,8 +179,8 @@ def transfer():
     
     if(username and bank.account_db.get_account_info(username)):
         # Implement transfer logic here
-        bank.transfer(username, target_account, int(transfer_amount))
-        bank.auth.create_transfer_history(username, target_account, transfer_amount)
+
+
         return jsonify({'success': True})
     else:
         return jsonify({'error': 'Invalid token'}), 401
@@ -191,7 +191,8 @@ def get_transaction_history():
     token = request.headers.get('token')
     username = bank.auth.decode_jwt_token(token)
     if username and bank.account_db.get_account_info(username):
-        history = bank.account_db.get_account_transfer_history(username, 5)
+        # Implement transaction history here
+        history = "implement transaction history retrieval here! qwq"
         return jsonify({'transaction_history': history})
     else:
         return jsonify({'error': 'Invalid token'}), 401
