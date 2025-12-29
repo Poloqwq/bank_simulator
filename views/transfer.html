@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Simulator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+        }
+
+        ul{
+            list-style: none;
+            padding-left: 0px;
+        }
+        .navbar{
+            display: flex;
+            gap: 10px;
+        }
+        .navbar-button{
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+        }
+        .navbar-button:hover{
+            background-color: #0056b3;
+        }
+        .navlink{
+            text-decoration: none;
+        }
+
+        label {
+            font-weight: bold;
+            font-size: 21px;
+        }
+        .txtbox{
+            width: 100%;
+            padding: 8px;
+            margin-top: 4px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .submit{
+            background-color: #28a745;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .prompt_box{
+            padding: 10px;
+            background-color: #ffdddd;
+            border-left: 6px solid #f44336;
+        }
+    </style>
+
+    <script>
+        
+        
+        
+        async function fetchToken(){
+            const token = localStorage.getItem("token");
+            if(token){
+                const flag = await fetch("/validate_token", {
+                    method: "POST",
+                    headers: {
+                        "token": token
+                    }
+                });
+                const data = await flag.json();
+                console.log(flag);
+                if(flag.ok && data.valid == true){
+                    const response = await fetch("/token_to_username", {
+                        method: "POST",
+                        headers: {
+                            "token": token
+                        }
+                    });
+                    const userData = await response.json();
+                    document.getElementById("username_display").textContent = userData.username;
+                    filterOwnAccountInfo(userData.username);
+                }
+                else{
+                    console.log("Invalid token");
+                    localStorage.removeItem("token");
+                    window.location.href = "/";
+                }
+            }
+            else{
+                window.location.href = "/";
+            }
+        }
+
+        fetchToken();
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.querySelector('form[name="transfer_form"]');
+            if (!form) return;
+
+            const token = localStorage.getItem("token");
+        
+            const ensurePromptBox = () => {
+                let box = document.querySelector('.prompt_box');
+                if (!box) {
+                    box = document.createElement('div');
+                    box.className = 'prompt_box';
+                    // Insert before the form
+                    form.parentNode.insertBefore(box, form);
+                }
+                return box;
+            };
+        
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const formData = new FormData(form);
+                try {
+                    const resp = await fetch('/transfer', {
+                        method: 'POST',
+                        headers: {
+                            'token': token
+                        },
+                        body: formData
+                    });
+                    const data = await resp.json();
+        
+                    if (resp.ok && data.success) {
+                        // Redirect to user home with token for server-side verification
+                        window.location.href = '/user_home';
+                    } else {
+                        const msg = (data && data.error) ? data.error : 'Transfer failed';
+                        const box = ensurePromptBox();
+                        box.textContent = msg;
+                    }
+                } catch (err) {
+                    const box = ensurePromptBox();
+                    box.textContent = 'Network error, please try again.';
+                }
+            });
+        });
+
+        </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Transfer</h1>
+        <ul class="navbar">
+            <li><a class="navlink" href="/user_home"><div class="navbar-button">Back to Homepage</div></a></li>
+        </ul>
+        <hr><br>
+
+        {% if prompt %}
+            <div class="prompt_box">{{ prompt }}</div>
+            <br>
+        {% endif %}
+        
+
+        <form name="transfer_form" method="post">
+
+            <label for="recipient">Recipient Username:</label><br>
+            <input class="txtbox" type="text" id="recipient" name="recipient" required><br><br>
+
+            <label for="amount">Amount:</label><br>
+            <input class="txtbox" type="number" id="amount" name="amount" min="0" oninput="this.value = Math.round(this.value);" required><br><br>
+
+            <input class="submit" type="submit" value="Transfer">
+        </form>
+    </div>
+</body>
+</html>

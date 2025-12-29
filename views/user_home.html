@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Simulator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        ul{
+            list-style: none;
+            padding-left: 0px;
+        }
+        .navbar{
+            display: flex;
+            gap: 10px;
+        }
+        .navbar-button{
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+        }
+        .navbar-button:hover{
+            background-color: #0056b3;
+        }
+        .navlink{
+            text-decoration: none;
+        }
+
+        #username_display{
+            font-weight: bold;
+            font-size: 45px;
+            margin-top: 5px;
+        }
+
+        .accounts_info_list{
+            margin: 0px;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e8e8e8;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+        }
+        .accounts_ids, .accounts_deposits{
+            display: flex;
+            flex-direction: column;
+            width: 50%;
+            
+        }
+        .accounts_deposits{
+            text-align: right;
+            margin-left: 10px;
+        }
+        .accounts_ids{
+            margin-right: 10px;
+        } 
+        .id_title, .deposit_title{
+            font-weight: bold;
+            font-size: 23px;
+            text-decoration: underline;
+            margin: 20px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            padding: 20px;
+            background-color: #fdfdfd;
+        }
+        .deposit_title{
+            text-align: right;
+            margin-left: 0px;
+        }
+        .id_title{
+            margin-right: 0px;
+        }
+        .id_list, .deposit_list{
+            background-color: #fdfdfd;
+            border-radius: 10px;
+            padding: 20px;
+            padding-top: 30px;
+            margin: 0px 20px 20px 20px;
+        }
+        .id_list{
+            margin-right: 0px;
+        }
+        .deposit_list{
+            text-align: right;
+            margin-left: 0px;
+        }
+        .item{
+            font-size: 18px;
+            padding: 6px 0px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .UI{
+            margin: 0px;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e8e8e8;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+        }
+        .UI_description{
+            font-weight: bold;
+            font-size: 23px;
+            text-decoration: underline;
+            margin: 20px;
+            margin-bottom: 10px;
+        }
+        .user_info{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            margin: 0px 20px 20px 20px;
+        }
+        .deposits_and_loans{
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+        }
+        .user_deposits_div, .user_loans_div{
+            padding: 6px 0px;
+            border-radius: 10px;
+            background-color: #fdfdfd;
+            width: 40%;
+            text-align: center;
+            padding: 15px;
+        }
+        .user_deposits_div_title, .user_loans_div_title{
+            font-weight: bold;
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+        .user_deposits_div_data, .user_loans_div_data{
+            font-size: 35px;
+            font-weight: bold;
+        }
+        .lately_activity{
+            border-radius: 10px;
+            padding: 20px;
+            background-color: #fdfdfd;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .recent_login_title, .recent_transactions_title{
+            font-weight: bold;
+            margin-bottom: 0px;
+        }
+        .recent_login_textbox, .recent_transactions_textbox{
+            margin-top: 0px;
+            margin-bottom: 8px;
+            font-weight: normal;
+        }
+        .login_textbox_item, .transaction_textbox_item{
+            padding: 8px;
+            padding-bottom: 0px;
+            border-bottom: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        .services{
+            margin: 0px;
+            padding: 10px;
+            background-color: #e8e8e8;
+            border-radius: 10px;    
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .services_list{
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            padding-left: 0px;
+            list-style: none;
+        }
+        .service_button{
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            width: 80%;
+            max-width: 150px;
+            max-height: 145px;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+        .service_button:hover{
+            background-color: #dcdcdc;
+        }
+        .service_name{
+            font-weight: bold;
+            margin-top: 10px;
+            font-size: 18px;
+            text-decoration: none;
+            color: black
+        }
+</style>
+
+    <script>
+
+        function filterOwnAccountInfo(username){
+            document.querySelectorAll('.accounts_ids .id_list .item, .accounts_deposits .deposit_list .item').forEach(li => {
+                if(li.dataset.username === username){
+                    li.remove();
+                }
+            });
+            if(document.querySelectorAll('.accounts_ids .id_list .item').length === 0){
+                const idList = document.querySelector('.accounts_ids .id_list');
+                const noAccountsItem = document.createElement('li');
+                noAccountsItem.textContent = 'No other accounts available.';
+                idList.appendChild(noAccountsItem);
+            }
+            if(document.querySelectorAll('.accounts_deposits .deposit_list .item').length === 0){
+                const depositList = document.querySelector('.accounts_deposits .deposit_list');
+                const noDepositsItem = document.createElement('li');
+                noDepositsItem.textContent = 'No other deposits available.';
+                depositList.appendChild(noDepositsItem);
+            }
+        }
+        
+        async function fetchToken(){
+            const token = localStorage.getItem("token");
+            if(token){
+                const flag = await fetch("/validate_token", {
+                    method: "POST",
+                    headers: {
+                        "token": token
+                    }
+                });
+                const data = await flag.json();
+                console.log(flag);
+                if(flag.ok && data.valid == true){
+                    const response = await fetch("/token_to_username", {
+                        method: "POST",
+                        headers: {
+                            "token": token
+                        }
+                    });
+                    const userData = await response.json();
+                    document.getElementById("username_display").textContent = userData.username;
+                    filterOwnAccountInfo(userData.username);
+                }
+                else{
+                    console.log("Invalid token");
+                    localStorage.removeItem("token");
+                    window.location.href = "/";
+                }
+            }
+            else{
+                window.location.href = "/";
+            }
+        }
+
+        async function getBalance(){
+            const token = localStorage.getItem("token");
+            if(token){
+                const response = await fetch("/get_balance", {
+                    method: "POST",
+                    headers: {
+                        "token": token
+                    }
+                });
+                if(response.ok){
+                    const data = await response.json();
+                    document.getElementById("user_deposits_div_data").textContent = `${data.balance}`;
+                    document.getElementById("user_loans_div_data").textContent = "0";
+                }
+            }
+        }
+
+        async function getLoginHistory(){
+            const token = localStorage.getItem("token");
+            if(token){
+                const response = await fetch("/get_login_history", {
+                    method: "POST",
+                    headers: {
+                        "token": token
+                    }
+                });
+                if(response.ok){
+                    const data = await response.json();
+                    const loginBox = document.querySelector(".recent_login_textbox");
+                    loginBox.innerHTML = "";
+                    if(data.login_history && data.login_history.length > 0){
+                        data.login_history.forEach(item => {
+                            const div = document.createElement("div");
+                            div.className = "login_textbox_item";
+                            div.textContent = item;
+                            loginBox.appendChild(div);
+                        });
+                    }
+                    else{
+                        const div = document.createElement("div");
+                        div.className = "login_textbox_item";
+                        div.textContent = "No recent logins.";
+                        loginBox.appendChild(div);
+                    }
+                }
+            }
+        }
+
+        async function getTransactionHistory(){
+            const token = localStorage.getItem("token");
+            if(token){
+                const response = await fetch("/get_transaction_history", {
+                    method: "POST",
+                    headers: {
+                        "token": token
+                    }
+                });
+                if(response.ok){
+                    const data = await response.json();
+                    const transactionBox = document.querySelector(".recent_transactions_textbox");
+                    transactionBox.innerHTML = "";
+                    if(data.transaction_history && data.transaction_history.length > 0){
+                        data.transaction_history.forEach(item => {
+                            const div = document.createElement("div");
+                            div.className = "transaction_textbox_item";
+                            div.textContent = item;
+                            transactionBox.appendChild(div);
+                        });
+                    }
+                    else{
+                        const div = document.createElement("div");
+                        div.className = "transaction_textbox_item";
+                        div.textContent = "No recent transactions.";
+                        transactionBox.appendChild(div);
+                    }
+                }
+            }
+        }
+        
+        fetchToken();
+        getBalance();
+        getLoginHistory();
+        getTransactionHistory();
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>
+            Welcome back! <br>
+            <div id="username_display"></div>
+        </h1>
+        <ul class="navbar">
+            <li><a class="navlink" id="logout_button" href=""><div class="navbar-button">Logout</div></a></li>
+        </ul>
+        <hr>
+        <div class="UI">
+            <div class="UI_description">Your Accounts Information</div>
+            <div class="user_info">
+                <div class="deposits_and_loans">
+                    <div class="user_deposits_div">
+                        <div class="user_deposits_div_title">Total Deposits</div>
+                        <div class="user_deposits_div_data" id="user_deposits_div_data"></div>
+                    </div>
+                    <div class="user_loans_div">
+                        <div class="user_loans_div_title">Total Loans</div>
+                        <div class="user_loans_div_data" id="user_loans_div_data"></div>
+                    </div>
+                </div>
+                <div class="lately_activity">
+                    <div class="recent_login_title">Recent Logins:</div>
+                    <div class="recent_login_textbox">                        
+                        <div class="login_textbox_item" id="login_textbox_item">No recent logins.</div>
+                    </div>
+                    <div class="recent_transactions_title">Recent Transactions:</div>
+                    <div class="recent_transactions_textbox">
+                        <div class="transaction_textbox_item" id="transaction_textbox_item">No recent transactions.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="services">
+                <ul class="services_list">
+                    <li><a class="navlink" href="/deposit_page">
+                        <div class="service_button">
+                            <img src="{{ url_for('static', filename='deposit_money.png') }}" alt="Deposit Icon" style="width:80%; height:80%; vertical-align: middle;">
+                            <div class="service_name">Deposit Money</div>
+                        </div>
+                    </a></li>
+                    <li><a class="navlink" href="/withdraw_page">
+                        <div class="service_button">
+                            <img src="{{ url_for('static', filename='withdraw_money.png') }}" alt="Withdraw Icon" style="width:80%; height:80%; vertical-align: middle;">
+                            <div class="service_name">Withdraw Money</div>
+                        </div>
+                    </a></li>
+                    <li><a class="navlink" href="/transfer_page">
+                        <div class="service_button">
+                            <img src="{{ url_for('static', filename='transfer.png') }}" alt="Transfer Funds Icon" style="width:80%; height:80%; vertical-align: middle;">
+                            <div class="service_name">Transfer Funds</div>
+                        </div>
+                    </a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="accounts_info_list">
+            <ul class="accounts_ids">
+                <div class="id_title">Other Accounts</div>
+                <ul class="id_list">
+                    {% if accounts %}
+                        {% for account_id in accounts %}
+                            <li class="item" data-username="{{ account_id }}">{{ account_id }}</li>
+                        {% endfor %}
+                    {% else %}
+                        <li>No accounts available.</li>
+                    {% endif %}
+                </ul>
+            </ul>
+            <ul class="accounts_deposits">
+                <div class="deposit_title">Other Deposits</div>
+                <ul class="deposit_list">
+                    {% if accounts %}
+                        {% for account_id in accounts %}
+                            <li class="item" data-username="{{ account_id }}">${{ db.get_account_balance(account_id) }}</li>
+                        {% endfor %}
+                    {% else %}
+                        <li>No deposits available.</li>
+                    {% endif %}
+                </ul>     
+            </ul>
+        </div>  
+    </div>
+
+    <script>
+        const link = document.getElementById("logout_button");
+        link.addEventListener("click", () => {
+            localStorage.removeItem("token");
+            window.location.href = "/";
+        });
+    </script>
+    
+</body>
+</html>

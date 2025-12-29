@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bank Simulator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        ul{
+            list-style: none;
+            padding-left: 0px;
+        }
+        .navbar{
+            display: flex;
+            gap: 10px;
+        }
+        .navbar-button{
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+        }
+        .navbar-button:hover{
+            background-color: #0056b3;
+        }
+        .navlink{
+            text-decoration: none;
+        }
+
+        .accounts_info_list{
+            margin: 0px;
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #e8e8e8;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+        }
+
+        .accounts_ids, .accounts_deposits{
+            display: flex;
+            flex-direction: column;
+            width: 50%;
+            
+        }
+        .accounts_deposits{
+            text-align: right;
+            margin-left: 10px;
+        }
+        .accounts_ids{
+            margin-right: 10px;
+        }
+        
+        .id_title, .deposit_title{
+            font-weight: bold;
+            font-size: 23px;
+            text-decoration: underline;
+            margin: 20px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            padding: 20px;
+            background-color: #fdfdfd;
+        }
+        .deposit_title{
+            text-align: right;
+            margin-left: 0px;
+        }
+        .id_title{
+            margin-right: 0px;
+        }
+        
+        .id_list, .deposit_list{
+            background-color: #fdfdfd;
+            border-radius: 10px;
+            padding: 20px;
+            padding-top: 30px;
+            margin: 0px 20px 20px 20px;
+        }
+        .id_list{
+            margin-right: 0px;
+        }
+        .deposit_list{
+            text-align: right;
+            margin-left: 0px;
+        }
+
+        .item{
+            font-size: 18px;
+            padding: 6px 0px;
+            border-bottom: 1px solid #ccc;
+        }
+    </style>
+
+    <script>
+        async function fetchToken(){
+            const token = localStorage.getItem("token");
+            if(token){
+                const response = await fetch("/validate_token", {
+                    method: "POST",
+                    headers: {
+                        "token": token
+                    }    
+                });
+                const data = await response.json();
+                console.log(response);
+                if(response.ok && data.valid == true){
+                    window.location.href = "/user_home";
+                }
+                else{
+                    console.log("qwq");
+                }
+            }
+        }
+        
+        fetchToken();
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Bank Simulator</h1>
+        <h1>This is {{ bank_name }}</h1>
+        <ul class="navbar">
+            <li><a class="navlink" href="/create_account"><div class="navbar-button">Create Account</div></a></li>
+            <li><a class="navlink" href="/login"><div class="navbar-button">Login Account</div></a></li>
+        </ul>
+        <hr>
+        <div class="accounts_info_list">
+            <ul class="accounts_ids">
+                <div class="id_title">Accounts</div>
+                <ul class="id_list">
+                    {% if accounts %}
+                        {% for account_id in accounts %}
+                            <li class="item">{{ account_id }}</li>
+                        {% endfor %}
+                    {% else %}
+                        <li>No accounts available.</li>
+                    {% endif %}
+                </ul>
+            </ul>
+            <ul class="accounts_deposits">
+                <div class="deposit_title">Deposits</div>
+                <ul class="deposit_list">
+                    {% if accounts %}
+                        {% for account_id in accounts %}
+                            <li class="item">${{ db.get_account_balance(account_id) }}</li>
+                        {% endfor %}
+                    {% else %}
+                        <li>No deposits available.</li>
+                    {% endif %}
+                </ul>     
+            </ul>
+        </div>  
+    </div>
+</body>
+</html>
