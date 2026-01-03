@@ -139,7 +139,7 @@ def deposit():
     deposit_amount = request.form['amount']
     if(username and bank.account_db.get_account_info(username)):
         # Implement deposit logic here
-        
+        bank.deposit(username, int(deposit_amount))
         return jsonify({'success': True})
     else:
         return jsonify({'error': 'Invalid token'}), 401
@@ -150,14 +150,17 @@ def deposit():
 def withdraw():
     token = request.headers.get('token')
     username = bank.auth.decode_jwt_token(token)
-    deposit_amount = int(request.form['amount'])
+    withdraw_amount = int(request.form['amount'])
+    
 
-    if(deposit_amount > bank.account_db.balances.get(username, 0)):
-        return jsonify({'error': 'Insufficient funds'}), 400
 
     if(username and bank.account_db.get_account_info(username)):
-        # Implement deposit logic here
+        if(withdraw_amount > bank.account_db.balances.get(username, 0)):
+            return jsonify({'error': 'Insufficient funds'}), 400
         
+        # Implement withdraw logic here
+
+        bank.withdraw(username, int(withdraw_amount))
         return jsonify({'success': True})
     else:
         return jsonify({'error': 'Invalid token'}), 401
@@ -179,8 +182,8 @@ def transfer():
     
     if(username and bank.account_db.get_account_info(username)):
         # Implement transfer logic here
-
-
+        bank.transfer(username, target_account, int(transfer_amount))
+        bank.auth.create_transfer_history(username, target_account, transfer_amount)
         return jsonify({'success': True})
     else:
         return jsonify({'error': 'Invalid token'}), 401
@@ -191,8 +194,7 @@ def get_transaction_history():
     token = request.headers.get('token')
     username = bank.auth.decode_jwt_token(token)
     if username and bank.account_db.get_account_info(username):
-        # Implement transaction history here
-        history = "implement transaction history retrieval here! qwq"
+        history = bank.account_db.get_account_transfer_history(username, 5)
         return jsonify({'transaction_history': history})
     else:
         return jsonify({'error': 'Invalid token'}), 401
