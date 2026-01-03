@@ -152,8 +152,6 @@ def withdraw():
     username = bank.auth.decode_jwt_token(token)
     withdraw_amount = int(request.form['amount'])
     
-
-
     if(username and bank.account_db.get_account_info(username)):
         if(withdraw_amount > bank.account_db.balances.get(username, 0)):
             return jsonify({'error': 'Insufficient funds'}), 400
