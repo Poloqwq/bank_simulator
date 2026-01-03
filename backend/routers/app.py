@@ -150,14 +150,17 @@ def deposit():
 def withdraw():
     token = request.headers.get('token')
     username = bank.auth.decode_jwt_token(token)
-    deposit_amount = int(request.form['amount'])
+    withdraw_amount = int(request.form['amount'])
+    
 
-    if(deposit_amount > bank.account_db.balances.get(username, 0)):
-        return jsonify({'error': 'Insufficient funds'}), 400
 
     if(username and bank.account_db.get_account_info(username)):
-        # Implement deposit logic here
-        bank.withdraw(username, int(deposit_amount))
+        if(withdraw_amount > bank.account_db.balances.get(username, 0)):
+            return jsonify({'error': 'Insufficient funds'}), 400
+        
+        # Implement withdraw logic here
+
+        bank.withdraw(username, int(withdraw_amount))
         return jsonify({'success': True})
     else:
         return jsonify({'error': 'Invalid token'}), 401
