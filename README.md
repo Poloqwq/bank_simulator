@@ -30,7 +30,9 @@
      ```
      pytest .\tests\test_app_routes.py
      ```
-     若什麼都沒做的話將看到 4 fail ....
+     若什麼都沒做的話將看到 3 fail ....
+     <img width="1065" height="82" alt="image" src="https://github.com/user-attachments/assets/be0c4c9f-373e-47ed-ae46-11042fb2380c" />
+
      而你的工作就是把它處裡到全部success!
      
     
