@@ -12,10 +12,16 @@
      
 
      - studentVersion branch 是給你們練習的版本，當然燒機太久想看答案，答案就在main branch裡面，自行運用。 :D
+  
   2. **編輯dockerfile與compose.yml**  
      - 讓此app能以網站的形式跑起來
      - 預設開啟的網址為 localhost:5000/
-     - 還未編輯dockerfile與compose.yml前，可以用以下指令: 
+       
+     - 還未編輯dockerfile與compose.yml前想先看網站模樣，記得先用以下指令安裝所需套件:
+       ```
+       pip install -r requirement.txt
+       ```
+     - 接著用以下指令: 
        ```
        python backend/routers/app.py
        ```
