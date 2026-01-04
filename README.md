@@ -1,4 +1,4 @@
-<img width="1065" height="82" alt="image" src="https://github.com/user-attachments/assets/22631dfa-30d8-435d-997e-85f2db4941a3" />### Bank Simulator
+### Bank Simulator
 這是一個銀行模擬器，但現在有個問題是它的存錢(deposit)、取錢(withdraw)、轉帳(transfer)等功能是缺失的，請你幫我們找到正確的函式，並且找到對的地方進行呼叫，讓deposit、withdraw、transfer等功能正常運行!
 
 - **目標Objective:**  
