@@ -7,6 +7,10 @@
 - **Instructions & Steps:**  
   1. **Fork this repository & 切換到studentVersion branch:**  
      - Fork下來這樣你才能自由使用 :D
+     - 請記得fork的時候把這一個checkbox取消
+     <img width="707" height="108" alt="image" src="https://github.com/user-attachments/assets/ba2208c6-8ad1-48fc-bd13-1c84e82d1a60" />
+     
+
      - studentVersion branch 是給你們練習的版本，當然燒機太久想看答案，答案就在main branch裡面，自行運用。 :D
   2. **編輯dockerfile與compose.yml**  
      - 讓此app能以網站的形式跑起來
