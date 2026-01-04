@@ -1,12 +1,14 @@
 version: '3.8'
 services:
   bank_simulator:
-    build: 
+    build: .
     ports:
-      
+      - "5000:5000"
     volumes:
-      
-    command: 
+      - .:/app
+    environment:
+      - FLASK_ENV=development
+    command: python backend/routers/app.py
 
   sonarqube:
     image: sonarqube:latest
