@@ -1,18 +1,9 @@
 version: '3.8'
 services:
   bank_simulator:
-    build: .
+    build:
     ports:
-      - "5000:5000"
     volumes:
-      - .:/app
-    environment:
-      - FLASK_ENV=development
-    command: python backend/routers/app.py
+    command:
 
-  sonarqube:
-    image: sonarqube:latest
-    ports:
-      - "9000:9000"
-    environment:
-      - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
+  
